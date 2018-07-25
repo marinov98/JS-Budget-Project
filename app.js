@@ -12,7 +12,39 @@
 
 
 //BUDGET CONTROLLER
-var budgetController = (function() {
+var budgetController = (function()
+{
+  var Expense = function(id, description, value)
+  {
+    this.id = id;
+    this.description = description;
+    this.value = value;
+  };
+
+  var Income = function(id, description, value)
+  {
+    this.id = id;
+    this.description = description;
+    this.value = value;
+  };
+
+  var allExpenses = [];
+  var allIncomes = [];
+  var totalExpenses = 0;
+
+  var data = {
+    allItems:
+    {
+      exp: [],
+      inc: []
+    },
+    totals:
+    {
+      exp: 0,
+      inc: 0
+    }
+  };
+
 
 })();
 
@@ -50,26 +82,37 @@ var UIController = (function()
 //Global APP CONTROLLER
 var controller = (function(budgetCtrl, UICtrl)
 {
-  var DOM = UICtrl.getDOMstrings();
+  var setupEventListner = function()
+  {
+    var DOM = UICtrl.getDOMstrings();
+
+    document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
+
+    document.addEventListener('keypress', function(event)
+    {
+      //which for older browsers that DONT have keycode
+      if (event.keyCode === 13 || event.which === 13)
+      {
+        ctrlAddItem();
+      }
+    });
+  };
 
   var ctrlAddItem = function()
   {
     //Getting field input data
     var input = UICtrl.getInput();
     console.log(input);
-  }
+  };
 
-  document.querySelector(DOM.inputBtn).addEventListener('click', function() {
-
-  });
-
-  document.addEventListener('keypress', function(event)
-  {
-    //which for older browsers that DONT have keycode
-    if (event.keyCode == 13 || event.which === 13)
+  return {
+    init: function()
     {
-      ctrlAddItem();
+      console.log('Application has started.');
+      setupEventListner();
     }
-  });
+  };
 
 })(budgetController, UIController);
+
+controller.init();
